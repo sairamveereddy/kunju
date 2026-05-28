@@ -1,0 +1,12 @@
+.venv/
+mingit/
+mingit.zip
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+build/
+dist/
+tmp/
+*.spec
+*.sqlite3

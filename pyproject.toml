@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "privacy-alarm"
+version = "0.1.0"
+description = "A Windows privacy alarm that plays a sound when keyboard input is detected."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "pynput==1.7.7"
+]
+
+[project.scripts]
+privacy-alarm = "privacy_alarm.app:main"
+
+[tool.setuptools]
+packages = ["privacy_alarm"]
+
+[tool.setuptools.package-data]
+privacy_alarm = ["assets/alarm.mp3"]
