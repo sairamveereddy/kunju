@@ -1,0 +1,12 @@
+{
+  "framework": null,
+  "installCommand": null,
+  "buildCommand": null,
+  "outputDirectory": "site",
+  "rewrites": [
+    {
+      "source": "/download",
+      "destination": "/downloads/PrivacyAlarm-Windows.zip"
+    }
+  ]
+}
