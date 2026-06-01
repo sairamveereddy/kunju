@@ -19,4 +19,4 @@ privacy-alarm = "privacy_alarm.app:main"
 packages = ["privacy_alarm"]
 
 [tool.setuptools.package-data]
-privacy_alarm = ["assets/alarm.mp3", "assets/alarm.wav", "assets/kunju-hero.png"]
+privacy_alarm = ["assets/alarm.mp3", "assets/kunju-hero.png"]

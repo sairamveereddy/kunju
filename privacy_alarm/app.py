@@ -9,7 +9,6 @@ import threading
 import time
 import urllib.error
 import urllib.request
-import winsound
 import winreg
 from ctypes import CFUNCTYPE, POINTER, Structure, byref, c_int, c_ulong, c_void_p, create_unicode_buffer, get_last_error, windll
 from datetime import datetime, timedelta, timezone
@@ -31,7 +30,6 @@ def bundled_path(*parts: str) -> Path:
 
 
 DEFAULT_SOUND = bundled_path("assets", "alarm.mp3")
-DEFAULT_SOUND_WAV = bundled_path("assets", "alarm.wav")
 MASCOT_IMAGE = bundled_path("assets", "kunju-hero.png")
 ARMING_DELAY_SECONDS = 5
 MOUSE_MOVE_COOLDOWN_SECONDS = 0.15
@@ -225,16 +223,14 @@ def machine_id() -> str:
 
 
 class LoopingAlarm:
-    def __init__(self, sound_path: Path, wav_path: Path = DEFAULT_SOUND_WAV) -> None:
-        if not wav_path.exists() and not sound_path.exists():
-            raise FileNotFoundError(f"Alarm sound not found: {wav_path} or {sound_path}")
+    def __init__(self, sound_path: Path) -> None:
+        if not sound_path.exists():
+            raise FileNotFoundError(f"Alarm sound not found: {sound_path}")
 
         self.sound_path = sound_path
-        self.wav_path = wav_path
         self.alias = "privacy_alarm_sound"
         self.lock = threading.Lock()
         self.playing = False
-        self.using_winsound = False
 
     def start(self) -> None:
         with self.lock:
@@ -242,16 +238,6 @@ class LoopingAlarm:
                 return
 
             self.close_alarm_alias()
-            if self.wav_path.exists():
-                try:
-                    winsound.PlaySound(str(self.wav_path), winsound.SND_FILENAME | winsound.SND_ASYNC | winsound.SND_LOOP)
-                    self.using_winsound = True
-                    self.playing = True
-                    logging.info("Alarm started with winsound WAV.")
-                    return
-                except RuntimeError as exc:
-                    logging.error("Could not play WAV alarm. Falling back to MP3/MCI. Error: %s", exc)
-
             quoted_path = str(self.sound_path).replace('"', '\\"')
             opened = self._send(f'open "{quoted_path}" type mpegvideo alias {self.alias}')
             if opened != 0:
@@ -264,9 +250,8 @@ class LoopingAlarm:
                 logging.error("Could not play alarm sound. MCI code: %s", played)
                 self.close_alarm_alias()
                 return
-            self.using_winsound = False
             self.playing = True
-            logging.info("Alarm started with MP3/MCI fallback.")
+            logging.info("Alarm started with bundled MP3.")
 
     def stop(self) -> None:
         with self.lock:
@@ -278,7 +263,6 @@ class LoopingAlarm:
     @classmethod
     def force_stop_alias(cls) -> None:
         for _ in range(5):
-            winsound.PlaySound(None, winsound.SND_PURGE)
             cls.close_alarm_alias()
             cls._send("stop all")
             cls._send("close all")

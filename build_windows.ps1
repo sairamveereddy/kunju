@@ -15,7 +15,6 @@ if (-not (Test-Path -LiteralPath $Python)) {
     --windowed `
     --name "PrivacyAlarm" `
     --add-data "privacy_alarm\assets\alarm.mp3;privacy_alarm\assets" `
-    --add-data "privacy_alarm\assets\alarm.wav;privacy_alarm\assets" `
     --add-data "privacy_alarm\assets\kunju-hero.png;privacy_alarm\assets" `
     --collect-all pynput `
     "privacy_alarm\app.py"
