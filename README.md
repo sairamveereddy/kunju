@@ -1,3 +1,4 @@
+<img width="912" height="513" alt="image" src="https://github.com/user-attachments/assets/f20b4c35-13eb-4b3e-88d2-2cc4d9dda2c0" />
 # Privacy Alarm
 
 A small Windows privacy alarm app. Run it before you step away. It arms after 5 seconds, then keyboard activity, mouse movement, clicks, scrolls, or touchpad movement will loop the bundled alarm sound until `S` is pressed.
